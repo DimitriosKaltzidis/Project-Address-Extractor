@@ -1,5 +1,6 @@
 ﻿using AngleSharp;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +9,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace AddressExtractor
 {
@@ -22,7 +22,7 @@ namespace AddressExtractor
         [STAThread]
         static void Main(string[] args)
         {
-                MainAsync(args).GetAwaiter().GetResult();
+            MainAsync(args).GetAwaiter().GetResult();
         }
 
         static async Task MainAsync(string[] args)
@@ -200,7 +200,7 @@ namespace AddressExtractor
             // Line selector
             const string lineSelector = "table[id='zipTable']>tbody>tr";
 
-            var document = parser.Parse(response);
+            var document = parser.ParseDocument(response);
 
             var addressLines = document.QuerySelectorAll(lineSelector);
 
@@ -217,7 +217,7 @@ namespace AddressExtractor
 
                 if (addressParts == null || !addressParts.Any())
                 {
-                   continue;
+                    continue;
                 }
 
                 var temp = new Address()
